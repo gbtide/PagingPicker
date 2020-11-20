@@ -1,3 +1,4 @@
+include ':shared'
 include ':model'
 include ':app'
 rootProject.name = "pagingpicker"
