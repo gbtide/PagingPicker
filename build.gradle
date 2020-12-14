@@ -50,6 +50,7 @@ ext {
     // 6) etc
     material = "1.1.0"
     timber = "4.7.1"
+    swiperefreshlayout = "1.1.0"
 }
 
 allprojects {
