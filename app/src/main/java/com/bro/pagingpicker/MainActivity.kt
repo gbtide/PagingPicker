@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
                 removeDuration = 120L
             }
         }
-
-        viewModel.onCreateView()
     }
 
     private fun initViewModel() {

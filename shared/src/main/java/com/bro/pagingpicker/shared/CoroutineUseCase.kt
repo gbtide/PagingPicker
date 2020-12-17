@@ -15,14 +15,25 @@
  */
 package com.bro.pagingpicker.shared
 
-import kotlinx.coroutines.CoroutineDispatcher
-import timber.log.Timber
-import java.lang.Exception
 import com.bro.pagingpicker.shared.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * Executes business logic synchronously or asynchronously using Coroutines.
+ *
+ * memo.
+ * LoadUseCase<Animal, Result> 로 정의하면
+ * val a: LoadUseCase<Rabbit, Result> = LoadUseCase<Animal, Result>()
+ *
+ * 즉, LoadUseCase<Animal, Result>() 만 있어도
+ * a.invoke(rabbit)가 가능.
+ *
+ * [Comparable] 참고. 아래 코드 복습 * 10000
+ *     fun demo(x: Comparable<Number>) {
+ *        x.compareTo(1.0) // (Comparable<Double> y = x 가 가능하기 때문)
+ *     }
  */
 abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 
@@ -39,7 +50,7 @@ abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispat
                     Result.Success(it)
                 }
             }
-        } catch (e :Exception) {
+        } catch (e: Exception) {
             Timber.d(e)
             Result.Error(e)
         }

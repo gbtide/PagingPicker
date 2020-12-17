@@ -19,11 +19,13 @@ package com.bro.pagingpicker.shared.result
 import androidx.lifecycle.MutableLiveData
 
 /**
- * A generic class that holds a value with its loading status.
- * @param <T>
+ * 반복 * 100
+ * memo. 왜 out R 인가
+ * [Nothing]은 모든 타입의 sub class. 즉, Result<내 클래스> 로 해도 Flow 에서 Result<Nothing> (Loading or Error) 을 넣을 수 있다.
  */
 sealed class Result<out R> {
 
+    // memo. Success<Animal> 에 Success<Rabbit> 을 마구 던질수 있겠군
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val exception: Exception) : Result<Nothing>()
     object Loading : Result<Nothing>()

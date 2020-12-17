@@ -7,7 +7,8 @@ import com.bro.pagingpicker.shared.domain.LoadPhotoUseCase
 import com.bro.pagingpicker.shared.domain.LoadPhotoUseCaseResult
 import com.bro.pagingpicker.shared.result.Result
 import com.bro.pagingpicker.shared.result.data
-import com.bro.pagingpicker.shared.util.checkAllMatched
+import com.bro.pagingpicker.shared.result.succeeded
+import com.bro.pagingpicker.shared.util.combine
 import com.bro.pagingpicker.shared.util.map
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,64 +20,61 @@ class MainViewModel @ViewModelInject constructor(
     private val loadPhotoUseCase: LoadPhotoUseCase
 ) : ViewModel() {
 
-    private val loadPhotoResult = MutableLiveData<Result<LoadPhotoUseCaseResult>>()
+    companion object {
+        private const val TAG = "MainViewModel"
+    }
 
-    private var photos: LiveData<List<Image>> = loadPhotoResult.map {
+    private val loadResult = MutableLiveData<Result<LoadPhotoUseCaseResult>>()
+
+    private val photos: LiveData<List<Image>> = loadResult.map {
+        duringSwipe.value = false
+
         // 아래 표현 복습 * 10
         it.data?.list ?: ArrayList()
     }
 
-    // val vs var
     val mainUiData = photos.map {
         // TODO 필요한 데이터로 변경
         it
     }
 
-    private var swipeRequest = false
-    val swipeRefreshing: LiveData<Boolean> = loadPhotoResult.map {
-        // Whenever refresh finishes, stop the indicator, whatever the result
-        if (swipeRequest) {
-            when (it) {
-                is Result.Success -> {
-                    swipeRequest = false
-                    false
-                }
-                is Result.Error -> {
-                    swipeRequest = false
-                    false
-                }
-                is Result.Loading -> {
-                    true
-                }
-            }.checkAllMatched
+    private val duringSwipe = MutableLiveData<Boolean>()
+
+    val swipeRefreshing = duringSwipe.combine(loadResult) { swiping, result ->
+        if (swiping) {
+            result == Result.Loading
+        } else {
+            false
         }
-        false
     }
 
-    fun onCreateView() {
-        load()
+    val isEmpty = loadResult.map {
+        if (it.succeeded) {
+            it.data?.list?.isEmpty() ?: true
+        } else {
+            false
+        }
+    }
+
+    val isLoading = loadResult.map {
+        it == Result.Loading
+    }
+
+    init {
+        loadList()
     }
 
     fun onSwipeRefresh() {
-        swipeRequest = true
-        load()
+        duringSwipe.value = true
+        loadList()
     }
 
-    private fun load() {
+    private fun loadList() {
         viewModelScope.launch {
             loadPhotoUseCase(Unit).collect {
-                loadPhotoResult.value = it
+                loadResult.value = it
             }
         }
     }
-
-    val isEmpty: MutableLiveData<Boolean> = MutableLiveData()
-
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData()
-    // TODO
-    //    loadSessionsResult.map {
-    //        it == Result.Loading
-    //    }
-
 
 }
