@@ -1,22 +1,28 @@
 package com.bro.pagingpicker
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.app.Dialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.bro.pagingpicker.databinding.ActivityMainBinding
-import com.bro.pagingpicker.model.Cons
-import com.bro.pagingpicker.model.gallery.Image
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 // hilt 사용하면 반드시 습관처럼 해줘야함
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val REQUEST_READ_PERMISSION_CODE = 1001
+        private const val FRAGMENT_READ_PERMISSION_RATIONALE = "read_permission_rationale"
+    }
 
     private lateinit var binding: ActivityMainBinding
 
@@ -29,9 +35,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // 아래 세팅 없으니 Transformations 안먹힘
+        // memo. 종종 하는 실수. 아래 세팅 넣어야 xml 바인딩 됨. xml에 묶여있는 Transformations 등 liveData 오동작 막기
         binding.lifecycleOwner = this
 
+        checkPermission { init() }
+    }
+
+    private fun checkPermission(whenSuccess: () -> Unit) {
+        if (Build.VERSION.SDK_INT > 22) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                whenSuccess()
+                return
+            }
+
+            // memo. 한번 이상 거절 했을 때 + 다시 안보기 체크 안했을 때
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                ReadPermissionRationaleFragment()
+                    .show(supportFragmentManager, FRAGMENT_READ_PERMISSION_RATIONALE)
+                return
+            }
+
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_PERMISSION_CODE)
+        } else {
+            whenSuccess()
+        }
+    }
+
+    private fun init() {
         initViewModel()
 
         mainAdapter = MainAdapter()
@@ -49,12 +79,51 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModel.mainUiData.observe(this, { images ->
-            mainAdapter.submitList(images)
+        viewModel.mainUiData.observe(this, { pagedListLiveData ->
+            pagedListLiveData.observe(this, { images ->
+                mainAdapter.submitList(images)
+            })
+        })
+
+        viewModel.loadStatusObserver.observe(this, {
+
         })
 
         binding.viewModel = viewModel
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_READ_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    init()
+                } else {
+                    ReadPermissionRationaleFragment()
+                        .show(supportFragmentManager, FRAGMENT_READ_PERMISSION_RATIONALE)
+                    finish();
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    class ReadPermissionRationaleFragment : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return MaterialAlertDialogBuilder(context)
+                .setMessage(R.string.read_permission_rationale)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    requestPermissions(
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        REQUEST_READ_PERMISSION_CODE
+                    )
+                }
+                .setNegativeButton(android.R.string.cancel, null) // Give up
+                .create()
+        }
+    }
 
 }

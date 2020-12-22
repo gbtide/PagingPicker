@@ -4,6 +4,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import com.bro.pagingpicker.model.gallery.Image
 import com.bro.pagingpicker.shared.util.closeSafely
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -16,14 +17,14 @@ interface ImageLoader {
 }
 
 class LocalImageLoader(
-    private val cursorFactory: CursorFactory
+    private val queryExecutor: QueryExecutor
 ) : ImageLoader {
 
     private var cursor: Cursor? = null
 
     private fun getCursor(): Cursor? {
         if (cursor == null) {
-            cursor = cursorFactory.create()
+            cursor = queryExecutor.execute()
         }
         return cursor
     }
@@ -35,15 +36,18 @@ class LocalImageLoader(
 
         val images = ArrayList<Image>()
         val cur: Cursor = getCursor()!!
-        cur.moveToPosition(fromPos)
+        Timber.d("### LocalImageLoader.loadImage.count : %s", cur.count)
+
+        cur.moveToPosition(fromPos - 1)
         cur.let {
             for (i in 0 until loadSize) {
                 if (!it.moveToNext()) {
                     break
                 }
                 val dataIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
-                val data = cur.getString(dataIndex);
+                val data = cur.getString(dataIndex)
                 images.add(Image(data))
+                Timber.d("### LocalImageLoader.loadImage.path : %s", data)
             }
         }
         return images

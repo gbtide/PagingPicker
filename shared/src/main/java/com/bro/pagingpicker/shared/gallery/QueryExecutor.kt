@@ -7,13 +7,13 @@ import android.provider.MediaStore
 /**
  * Created by kyunghoon on 2020-12-14
  */
-interface CursorFactory {
-    fun create(): Cursor?
+interface QueryExecutor {
+    fun execute(): Cursor?
 }
 
-class ImageCursorFactory(private val context: Context) : CursorFactory {
+class ImageQueryExecutor(private val context: Context) : QueryExecutor {
 
-    override fun create(): Cursor? {
+    override fun execute(): Cursor? {
         return context.contentResolver.query(
             MediaStore.Files.getContentUri("external"),
             arrayOf(

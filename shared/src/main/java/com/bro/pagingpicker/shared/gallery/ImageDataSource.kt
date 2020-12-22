@@ -15,9 +15,9 @@ class ImageDataSource @Inject constructor(
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Image>) {
         Timber.d("### DataSource.loadInitial : %s", Thread.currentThread().name)
         val totalCount = loader.computeCount()
-        val position = computeInitialLoadPosition(params, totalCount);
-        val loadSize = computeInitialLoadSize(params, position, totalCount);
-        callback.onResult(loader.loadImage(position, loadSize), position, totalCount);
+        val position = computeInitialLoadPosition(params, totalCount)
+        val loadSize = computeInitialLoadSize(params, position, totalCount)
+        callback.onResult(loader.loadImage(position, loadSize), position, totalCount)
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Image>) {

@@ -1,7 +1,7 @@
 package com.bro.pagingpicker.shared.di
 
 import android.content.Context
-import com.bro.pagingpicker.shared.gallery.ImageCursorFactory
+import com.bro.pagingpicker.shared.gallery.ImageQueryExecutor
 import com.bro.pagingpicker.shared.gallery.ImageLoader
 import com.bro.pagingpicker.shared.gallery.LocalImageLoader
 import dagger.Module
@@ -18,6 +18,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class GalleryLoaderModule {
 
     @Provides
-    fun provideImageLoader(@ApplicationContext context: Context): ImageLoader = LocalImageLoader(ImageCursorFactory(context))
+    fun provideImageLoader(@ApplicationContext context: Context): ImageLoader = LocalImageLoader(ImageQueryExecutor(context))
 
 }
