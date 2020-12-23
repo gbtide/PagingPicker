@@ -23,7 +23,12 @@ class ImageQueryExecutor(private val context: Context) : QueryExecutor {
                 MediaStore.Files.FileColumns.SIZE,
                 MediaStore.Files.FileColumns.MIME_TYPE
             ),
-            MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
+            MediaStore.Files.FileColumns.MEDIA_TYPE +
+                    "=" +
+                    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE +
+                    " AND " +
+                    MediaStore.Files.FileColumns.SIZE +
+                    " > 0",
             null,
             String.format("%s %s", MediaStore.Images.Media.DATE_ADDED, "desc")
         )

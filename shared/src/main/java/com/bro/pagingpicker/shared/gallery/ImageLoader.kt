@@ -44,9 +44,12 @@ class LocalImageLoader(
                 if (!it.moveToNext()) {
                     break
                 }
-                val dataIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
-                val data = cur.getString(dataIndex)
-                images.add(Image(data))
+                val fileIdIndex = cur!!.getColumnIndex(MediaStore.Files.FileColumns._ID)
+                val pathIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
+                val data = cur.getString(pathIndex)
+                val fileId = cur!!.getLong(fileIdIndex)
+
+                images.add(Image(fileId, data))
                 Timber.d("### LocalImageLoader.loadImage.path : %s", data)
             }
         }

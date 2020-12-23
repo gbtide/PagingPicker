@@ -2,6 +2,6 @@
     <string name="app_name">pagingpicker</string>
     <string name="title_main">Gallery</string>
     <string name="picker_image_empty">No images found.</string>
-    <string name="read_permission_rationale">The app needs read permission to show your phone image.</string>
+    <string name="read_write_permission_rationale">The app needs read-write permission to show your phone image.</string>
 
 </resources>

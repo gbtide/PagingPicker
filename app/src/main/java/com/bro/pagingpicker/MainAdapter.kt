@@ -14,6 +14,10 @@ import com.bro.pagingpicker.model.gallery.Image
 class MainAdapter() : PagedListAdapter<Image, MainViewHolder>(MainDiff) {
     // memo. super(Diff) 방법
 
+    companion object {
+        const val COLUMN_COUNT = 3
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val binding = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MainViewHolder(binding)
@@ -39,7 +43,7 @@ class MainViewHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHo
 //   public static final ExampleObject INSTANCE = new ExampleObject();
 object MainDiff : DiffUtil.ItemCallback<Image>() {
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
-        return oldItem === newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
