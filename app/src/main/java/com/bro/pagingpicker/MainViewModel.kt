@@ -44,7 +44,9 @@ class MainViewModel @ViewModelInject constructor(
 
     val mainUiData = MutableLiveData<LiveData<PagedList<Image>>>()
 
-    val isLoading = loadResult.map { it == Result.Loading }
+    val isLoading: LiveData<Boolean> = loadResult.map {
+        dispatchSwipe.value != true && it == Result.Loading
+    }
 
     private val dispatchSwipe = MutableLiveData<Boolean>()
 

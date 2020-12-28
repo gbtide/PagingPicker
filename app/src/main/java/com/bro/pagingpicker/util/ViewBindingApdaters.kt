@@ -32,7 +32,6 @@ fun setSwipeRefreshColors(swipeRefreshLayout: CustomSwipeRefreshLayout, colorRes
 
 @BindingAdapter("glideImage")
 fun setGlideImage(imageView: ImageView, url: String?) {
-    Timber.d("### setGlideImage %s", url)
     Glide.with(imageView.context)
         .load(url)
         .centerCrop()

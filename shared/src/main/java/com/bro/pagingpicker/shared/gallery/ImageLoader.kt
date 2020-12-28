@@ -36,7 +36,7 @@ class LocalImageLoader(
 
         val images = ArrayList<Image>()
         val cur: Cursor = getCursor()!!
-        Timber.d("### LocalImageLoader.loadImage.count : %s", cur.count)
+//        Timber.d("### LocalImageLoader.loadImage.count : %s", cur.count)
 
         cur.moveToPosition(fromPos - 1)
         cur.let {
@@ -50,7 +50,7 @@ class LocalImageLoader(
                 val fileId = cur!!.getLong(fileIdIndex)
 
                 images.add(Image(fileId, data))
-                Timber.d("### LocalImageLoader.loadImage.path : %s", data)
+//                Timber.d("### LocalImageLoader.loadImage.path : %s", data)
             }
         }
         return images
