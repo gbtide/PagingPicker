@@ -10,9 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bro.pagingpicker.databinding.ActivityMainBinding
+import com.bro.pagingpicker.model.gallery.Image
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_READ_WRITE_PERMISSION_CODE = 1001
-        private const val FRAGMENT_READ_WRITE_PERMISSION_RATIONALE = "read_write_permission_rationale"
+        private const val FRAGMENT_READ_WRITE_PERMISSION_RATIONALE =
+            "read_write_permission_rationale"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -44,21 +49,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermission(whenSuccess: () -> Unit) {
         if (Build.VERSION.SDK_INT > 22) {
-            var granted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            var granted = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
             if (granted) {
                 whenSuccess
             }
 
             // memo. 한번 이상 거절 했을 때 + 다시 안보기 체크 안했을 때
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
-                || shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                || shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            ) {
                 ReadPermissionRationaleFragment()
                     .show(supportFragmentManager, FRAGMENT_READ_WRITE_PERMISSION_RATIONALE)
                 return
             }
 
-            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_READ_WRITE_PERMISSION_CODE)
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), REQUEST_READ_WRITE_PERMISSION_CODE
+            )
         } else {
             whenSuccess()
         }
@@ -84,13 +101,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModel.mainUiData.observe(this, { pagedListLiveData ->
-            pagedListLiveData.observe(this, { images ->
-                mainAdapter.submitList(images)
+        viewModel.mainUiData.observe(
+            this,
+            Observer<LiveData<PagedList<Image>>> { pagedListLiveData ->
+                pagedListLiveData.observe(this, Observer<PagedList<Image>> { images ->
+                    mainAdapter.submitList(images)
+                })
             })
-        })
 
-        viewModel.loadStatusObserver.observe(this, {
+        viewModel.loadStatusObserver.observe(this, Observer {
 
         })
 
