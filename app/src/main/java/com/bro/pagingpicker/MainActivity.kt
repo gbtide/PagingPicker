@@ -103,13 +103,13 @@ class MainActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel.mainUiData.observe(
             this,
-            Observer<LiveData<PagedList<Image>>> { pagedListLiveData ->
-                pagedListLiveData.observe(this, Observer<PagedList<Image>> { images ->
+            { pagedListLiveData ->
+                pagedListLiveData.observe(this, { images ->
                     mainAdapter.submitList(images)
                 })
             })
 
-        viewModel.loadStatusObserver.observe(this, Observer {
+        viewModel.loadStatusObserver.observe(this, {
 
         })
 
