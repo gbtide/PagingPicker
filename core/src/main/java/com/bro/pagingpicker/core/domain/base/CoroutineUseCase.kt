@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.bro.pagingpicker.shared.domain
+package com.bro.pagingpicker.core.domain.base
 
+import com.bro.pagingpicker.core.result.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import com.bro.pagingpicker.shared.result.Result
 
 abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bro.pagingpicker.shared.di
+package com.bro.pagingpicker.core.di
 
 import dagger.Module
 import dagger.Provides

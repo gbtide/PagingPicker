@@ -1,4 +1,4 @@
-package com.bro.pagingpicker.shared.util
+package com.bro.pagingpicker.core.util
 
 import android.database.Cursor
 import androidx.lifecycle.LiveData

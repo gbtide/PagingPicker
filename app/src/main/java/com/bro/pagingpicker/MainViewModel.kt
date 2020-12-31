@@ -3,14 +3,12 @@ package com.bro.pagingpicker
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagedList
+import com.bro.pagingpicker.core.domain.LoadPagedPhotoListUseCase
+import com.bro.pagingpicker.core.result.Result
+import com.bro.pagingpicker.core.result.ResultDataState
+import com.bro.pagingpicker.core.util.combine
 import com.bro.pagingpicker.model.gallery.Image
-import com.bro.pagingpicker.shared.domain.LoadPagedPhotoListUseCase
-import com.bro.pagingpicker.shared.result.Result
-import com.bro.pagingpicker.shared.result.data
-import com.bro.pagingpicker.shared.result.succeeded
-import com.bro.pagingpicker.shared.util.checkAllMatched
-import com.bro.pagingpicker.shared.util.combine
-import com.bro.pagingpicker.shared.util.map
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -18,67 +16,59 @@ import kotlinx.coroutines.launch
  * Created by kyunghoon on 2020-12-14
  */
 class MainViewModel @ViewModelInject constructor(
-    private val loadPagedPhotoListUseCase: LoadPagedPhotoListUseCase
+        private val loadPagedPhotoListUseCase: LoadPagedPhotoListUseCase
 ) : ViewModel() {
 
     companion object {
         private const val TAG = "MainViewModel"
     }
 
-    private val loadResult = MutableLiveData<Result<LiveData<PagedList<Image>>>>()
-
-    val loadStatusObserver = MediatorLiveData<Unit>().apply {
-        addSource(loadResult) {
-            when (it) {
-                is Result.Success -> {
-                    dispatchSwipe.value = false
-                    mainUiData.value = it.data
-                }
-                is Result.Error -> {
-                }
-                is Result.Loading -> {
-                }
-            }.checkAllMatched
-        }
-    }
-
     val mainUiData = MutableLiveData<LiveData<PagedList<Image>>>()
 
-    val isLoading: LiveData<Boolean> = loadResult.map {
-        dispatchSwipe.value != true && it == Result.Loading
-    }
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     private val dispatchSwipe = MutableLiveData<Boolean>()
 
-    val swipeRefreshing = dispatchSwipe.combine(loadResult) { bySwipe, result ->
-        bySwipe && (result == Result.Loading)
+    val swipeRefreshing = dispatchSwipe.combine(_isLoading) { bySwipe, isLoading ->
+        bySwipe && isLoading
     }
 
-    val isEmpty = loadResult.map {
-        if (it.succeeded) {
-            val response = it.data!!.value
-            response?.size == 0
-        } else {
-            false
-        }
+    val isEmpty = loadPagedPhotoListUseCase.dataState.map {
+        _isLoading.value = false
+        it == ResultDataState.Empty
     }
 
     init {
-        loadList()
+        _isLoading.value = true
+        viewModelScope.launch {
+            // memo. 실제로 데이터 로딩이 끝난 상태에서 Success 가 넘어오는게 아니고,
+            // dataSource 를 품고 있는 PagedList 가 build 되서 넘어오기 때문에
+            // 실제 loading empty 처리는 별개로 이루어져야 한다.
+            loadPagedPhotoListUseCase(Unit).collect {
+                when (it) {
+                    is Result.Success -> {
+                        // main data 복잡해지면 여기서 생성
+                        mainUiData.value = it.data
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
     }
 
     fun onSwipeRefresh() {
+        _isLoading.value = true
         dispatchSwipe.value = true
-        loadList()
+        refreshList()
     }
 
-    private fun loadList() {
-        viewModelScope.launch {
-            loadPagedPhotoListUseCase(Unit)
-                .collect {
-                    loadResult.value = it
-                }
-        }
+    private fun refreshList() {
+        // 기존 dataSource invalidate
+        // dataSource invalidate 되면 데이터 다시 불러오기 때문에 별도로 load 할 필요 없다.
+        mainUiData.value?.value?.dataSource?.invalidate()
     }
 
 }

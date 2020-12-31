@@ -54,7 +54,7 @@ dependencies {
 
     // project module.
     // memo. shared 내부에 model 이 api 로 연결
-    implementation(project(":shared"))
+    implementation(project(':core'))
 
     // android  ktx
     implementation "androidx.core:core-ktx:${project.core_ktx}"

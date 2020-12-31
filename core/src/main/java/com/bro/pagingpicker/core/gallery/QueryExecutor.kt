@@ -1,4 +1,4 @@
-package com.bro.pagingpicker.shared.gallery
+package com.bro.pagingpicker.core.gallery
 
 import android.content.Context
 import android.database.Cursor

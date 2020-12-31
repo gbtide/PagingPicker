@@ -1,10 +1,10 @@
-package com.bro.pagingpicker.shared.gallery
+package com.bro.pagingpicker.core.gallery
 
+import android.content.Context
 import android.database.Cursor
 import android.provider.MediaStore
 import com.bro.pagingpicker.model.gallery.Image
-import com.bro.pagingpicker.shared.util.closeSafely
-import timber.log.Timber
+import com.bro.pagingpicker.core.util.closeSafely
 import java.util.*
 
 /**
@@ -17,8 +17,13 @@ interface ImageLoader {
 }
 
 class LocalImageLoader(
-    private val queryExecutor: QueryExecutor
+    context: Context
 ) : ImageLoader {
+    private val queryExecutor: QueryExecutor
+
+    init {
+        queryExecutor = ImageQueryExecutor(context)
+    }
 
     private var cursor: Cursor? = null
 

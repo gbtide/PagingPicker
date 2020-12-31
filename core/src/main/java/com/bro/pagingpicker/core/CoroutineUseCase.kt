@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bro.pagingpicker.shared
+package com.bro.pagingpicker.core
 
-import com.bro.pagingpicker.shared.result.Result
+import com.bro.pagingpicker.core.result.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber

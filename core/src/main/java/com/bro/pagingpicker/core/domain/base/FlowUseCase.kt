@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.bro.pagingpicker.shared.domain
+package com.bro.pagingpicker.core.domain.base
 
-import com.bro.pagingpicker.shared.result.Result
+import com.bro.pagingpicker.core.result.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

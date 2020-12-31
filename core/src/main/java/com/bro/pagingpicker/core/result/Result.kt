@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bro.pagingpicker.shared.result
+package com.bro.pagingpicker.core.result
 
 import androidx.lifecycle.MutableLiveData
 

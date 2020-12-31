@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bro.pagingpicker.shared">
+    package="com.bro.pagingpicker.core">
 
     /
 </manifest>
