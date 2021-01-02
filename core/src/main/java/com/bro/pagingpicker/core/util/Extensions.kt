@@ -97,3 +97,11 @@ fun Cursor.closeSafely() {
         }
     }
 }
+
+inline fun <reified T> Any?.convertTo(type: Class<T>): T? {
+    return if (type.isInstance(this)) (this as T) else null
+}
+
+inline fun <reified T> Any?.convertTo(type: Class<T>, default: T): T {
+    return if (type.isInstance(this)) (this as T) else default
+}

@@ -33,8 +33,6 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private lateinit var mainAdapter: MainAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -67,32 +65,11 @@ class MainActivity : AppCompatActivity() {
     private fun init() {
         initViewModel()
 
-        mainAdapter = MainAdapter()
-        binding.recyclerviewGalleryImage.apply {
-            adapter = mainAdapter
-
-            (itemAnimator as DefaultItemAnimator).run {
-                supportsChangeAnimations = false
-                addDuration = 160L
-                moveDuration = 160L
-                changeDuration = 160L
-                removeDuration = 120L
-            }
-
-            layoutManager = GridLayoutManager(context, MainAdapter.COLUMN_COUNT)
-        }
     }
 
     private fun initViewModel() {
-        // 고민. 이중 옵져빙 구조
-        // pull to refresh 하면 dataSource 바뀌는 구조..
-        // pagedListLiveData 는 dataSource invalidate 되도 유지된다.
-        viewModel.mainUiData.observe(this, { pagedListLiveData ->
-            pagedListLiveData.observe(this, { images ->
-                mainAdapter.submitList(images)
-            })
-        })
-
+        // do observing if needed
+        //
         binding.viewModel = viewModel
     }
 

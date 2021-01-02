@@ -5,82 +5,32 @@
     tools:context=".MainActivity">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.bro.pagingpicker.MainViewModel" />
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            style="@style/Widget.PagingPicker.AppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+        <!-- memo.
+        app:defaultNavHost="true" 속성을 사용하면 NavHostFragment가 시스템 뒤로 버튼을 가로챕니다.
+         -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nav_graph" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
-                app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/title_main" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.bro.pagingpicker.widget.CustomSwipeRefreshLayout
-            android:id="@+id/refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:onRefreshListener="@{() -> viewModel.onSwipeRefresh()}"
-            app:refreshing="@{viewModel.swipeRefreshing}"
-            app:swipeRefreshColors="@{@intArray/swipe_refresh}">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_gallery_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/gallery_page_padding_bottom"
-                    android:scrollbars="vertical" />
-
-                <TextView
-                    android:id="@+id/empty"
-                    style="@style/Widget.PagingPicker.EmptyResults"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/gallery_page_padding_bottom"
-                    android:layout_marginHorizontal="@dimen/margin_large"
-                    android:text="@string/picker_image_empty"
-                    app:goneUnless="@{viewModel.isEmpty}"
-                    tools:visibility="visible" />
-
-            </FrameLayout>
-
-        </com.bro.pagingpicker.widget.CustomSwipeRefreshLayout>
-
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="?attr/colorControlLight"
-            app:goneUnless="@{viewModel.isLoading}" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

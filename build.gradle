@@ -53,6 +53,7 @@ ext {
     swiperefreshlayout = "1.1.0"
     paging = "2.1.2"
     glide = "4.11.0"
+    navigation = "2.3.2"
 }
 
 allprojects {

@@ -34,9 +34,6 @@ class LoadPagedPhotoListUseCase @Inject constructor(
     private val _dataState = MutableLiveData<ResultDataState>()
     val dataState: LiveData<ResultDataState>
         get() = _dataState
-    //
-    // memo. flow 가 적절하지 않은 것 같다. success 던지기. & builder 열어주기? .. reactive 하지 않은
-    //
 
     init {
         livePagedListBuilder = LivePagedListBuilder(imageDataSourceFactory, PAGE_SIZE).apply {
