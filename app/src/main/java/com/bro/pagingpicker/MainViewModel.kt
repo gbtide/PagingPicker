@@ -1,16 +1,9 @@
 package com.bro.pagingpicker
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import androidx.paging.PagedList
-import com.bro.pagingpicker.core.domain.LoadPagedPhotoListUseCase
-import com.bro.pagingpicker.core.result.Result
-import com.bro.pagingpicker.core.result.ResultDataState
-import com.bro.pagingpicker.core.util.combine
-import com.bro.pagingpicker.model.gallery.Image
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.bro.pagingpicker.core.util.SingleLiveEvent
 
 /**
  * Created by kyunghoon on 2020-12-14
@@ -22,7 +15,12 @@ class MainViewModel @ViewModelInject constructor(
         private const val TAG = "MainViewModel"
     }
 
-    init {
+    private val _successGetPermissionEvent = SingleLiveEvent<Unit>()
+    val successGetPermissionEvent: LiveData<Unit>
+        get() = _successGetPermissionEvent
+
+    fun onSuccessGetPermission() {
+        _successGetPermissionEvent.call()
     }
 
 }

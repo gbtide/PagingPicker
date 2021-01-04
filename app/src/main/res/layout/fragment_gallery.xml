@@ -28,12 +28,18 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/title_main" />
 
-        </com.google.android.material.appbar.AppBarLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:src="@drawable/event_placeholder_session1"
+                />
 
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.bro.pagingpicker.widget.CustomSwipeRefreshLayout
             android:id="@+id/refresh_layout"
@@ -49,13 +55,14 @@
                 android:layout_height="match_parent">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_gallery_image"
+                    android:id="@+id/recyclerview_gallery"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/gallery_page_padding_bottom"
-                    android:scrollbars="vertical" />
+                    android:scrollbars="vertical"
+                    />
 
                 <TextView
                     android:id="@+id/empty"
