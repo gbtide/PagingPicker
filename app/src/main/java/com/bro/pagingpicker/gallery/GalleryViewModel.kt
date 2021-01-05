@@ -34,10 +34,14 @@ class GalleryViewModel @ViewModelInject constructor(
         bySwipe && isLoading
     }
 
-    val isEmpty = loadPagedPhotoListUseCase.dataState.map {
+    private val existContents = loadPagedPhotoListUseCase.dataState.map {
         _isLoading.value = false
         dispatchSwipe.value = false
-        it == ResultDataState.Empty
+        it == ResultDataState.Exist
+    }
+
+    val isEmpty = existContents.map {
+        !it
     }
 
     init {
