@@ -11,7 +11,7 @@ interface QueryExecutor {
     fun execute(): Cursor?
 }
 
-class ImageQueryExecutor(private val context: Context) : QueryExecutor {
+internal class ImageQueryExecutor(private val context: Context) : QueryExecutor {
 
     override fun execute(): Cursor? {
         return context.contentResolver.query(

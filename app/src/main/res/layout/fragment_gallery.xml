@@ -32,12 +32,65 @@
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/title_main" />
 
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/upper_function_layout"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:src="@drawable/event_placeholder_session1"
-                />
+                android:layout_height="@dimen/upper_function_height"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                >
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/upper_function_left_guideline"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/margin_large"
+                    />
+
+                <ImageView
+                    android:id="@+id/upper_function_go_to_movies_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_play_circle_outline"
+                    app:layout_constraintStart_toStartOf="@id/upper_function_left_guideline"
+                    app:layout_constraintTop_toTopOf="@id/upper_function_layout"
+                    app:layout_constraintBottom_toTopOf="@id/upper_function_go_to_movies_text"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    />
+
+                <TextView
+                    android:id="@+id/upper_function_go_to_movies_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upper_function_go_to_movie"
+                    app:layout_constraintStart_toStartOf="@id/upper_function_go_to_movies_image"
+                    app:layout_constraintEnd_toEndOf="@id/upper_function_go_to_movies_image"
+                    app:layout_constraintTop_toBottomOf="@id/upper_function_go_to_movies_image"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/upper_function_go_to_favorite_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_favorite"
+                    android:layout_marginLeft="@dimen/margin_normal"
+                    app:layout_constraintStart_toEndOf="@id/upper_function_go_to_movies_image"
+                    app:layout_constraintTop_toTopOf="@id/upper_function_layout"
+                    app:layout_constraintBottom_toTopOf="@id/upper_function_go_to_favorite_text"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    />
+
+                <TextView
+                    android:id="@+id/upper_function_go_to_favorite_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upper_function_go_to_favorite"
+                    app:layout_constraintStart_toStartOf="@id/upper_function_go_to_favorite_image"
+                    app:layout_constraintEnd_toEndOf="@id/upper_function_go_to_favorite_image"
+                    app:layout_constraintTop_toBottomOf="@id/upper_function_go_to_favorite_image"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 

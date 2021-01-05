@@ -3,38 +3,59 @@ package com.bro.pagingpicker.core.gallery
 import android.content.Context
 import android.database.Cursor
 import android.provider.MediaStore
-import com.bro.pagingpicker.model.gallery.Image
 import com.bro.pagingpicker.core.util.closeSafely
+import com.bro.pagingpicker.model.gallery.Image
 import java.util.*
 
 /**
  * Created by kyunghoon on 2020-12-18
  */
-interface ImageLoader {
-    fun loadImage(fromPos: Int, loadSize: Int): List<Image>
+interface GalleryLoader {
+    fun loadContents(fromPos: Int, loadSize: Int): List<Image>
     fun reset()
     fun computeCount(): Int
 }
 
-class LocalImageLoader(
+abstract class ContentsLoader(
     context: Context
-) : ImageLoader {
+) : GalleryLoader {
     private val queryExecutor: QueryExecutor
 
     init {
-        queryExecutor = ImageQueryExecutor(context)
+        queryExecutor = createQueryExecutor(context)
     }
 
     private var cursor: Cursor? = null
 
-    private fun getCursor(): Cursor? {
+    abstract fun createQueryExecutor(context: Context): QueryExecutor
+
+    protected fun getCursor(): Cursor? {
         if (cursor == null) {
             cursor = queryExecutor.execute()
         }
         return cursor
     }
 
-    override fun loadImage(fromPos: Int, loadSize: Int): List<Image> {
+    override fun computeCount(): Int {
+        return getCursor()?.count ?: 0
+    }
+
+    override fun reset() {
+        cursor?.closeSafely()
+        cursor = null
+    }
+
+}
+
+class ImageLoader(
+    context: Context
+) : ContentsLoader(context) {
+
+    override fun createQueryExecutor(context: Context): QueryExecutor {
+        return ImageQueryExecutor(context)
+    }
+
+    override fun loadContents(fromPos: Int, loadSize: Int): List<Image> {
         if (getCursor() == null) {
             return ArrayList<Image>()
         }
@@ -60,15 +81,6 @@ class LocalImageLoader(
             }
         }
         return images
-    }
-
-    override fun computeCount(): Int {
-        return getCursor()?.count ?: 0
-    }
-
-    override fun reset() {
-        cursor?.closeSafely()
-        cursor = null
     }
 
 }

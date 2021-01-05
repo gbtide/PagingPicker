@@ -11,8 +11,8 @@ import javax.inject.Inject
 /**
  * Created by kyunghoon on 2020-12-14
  */
-class ImageDataSource constructor(
-    private val loader: ImageLoader
+class GalleryDataSource constructor(
+    private val loader: GalleryLoader
 ) : PositionalDataSource<Image>() {
 
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Image>) {
@@ -20,7 +20,7 @@ class ImageDataSource constructor(
         val totalCount = loader.computeCount()
         val position = computeInitialLoadPosition(params, totalCount)
         val loadSize = computeInitialLoadSize(params, position, totalCount)
-        callback.onResult(loader.loadImage(position, loadSize), position, totalCount)
+        callback.onResult(loader.loadContents(position, loadSize), position, totalCount)
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Image>) {
@@ -29,7 +29,7 @@ class ImageDataSource constructor(
             Thread.currentThread().name,
             params.startPosition
         )
-        callback.onResult(loader.loadImage(params.startPosition, params.loadSize))
+        callback.onResult(loader.loadContents(params.startPosition, params.loadSize))
     }
 
     override fun invalidate() {
@@ -44,7 +44,7 @@ class ImageDataSourceFactory @Inject constructor(
 ) : DataSource.Factory<Int, Image>() {
 
     override fun create(): DataSource<Int, Image> {
-        return ImageDataSource(LocalImageLoader(context))
+        return GalleryDataSource(ImageLoader(context))
     }
 
 }

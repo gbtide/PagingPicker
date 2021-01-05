@@ -6,4 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="upper_function_go_to_movie">Movie</string>
+    <string name="upper_function_go_to_favorite">Favorite</string>
+
 </resources>
