@@ -25,7 +25,7 @@
 
         <variable
             name="image"
-            type="com.bro.pagingpicker.model.gallery.Image" />
+            type="com.bro.pagingpicker.model.gallery.GalleryItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,7 +54,7 @@
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:glideImage="@{image.data}"
+            app:glideImage="@{image.filePath}"
             android:textAlignment="viewStart"
             android:textAppearance="?textAppearanceListItem"
             app:layout_constraintDimensionRatio="1:1"

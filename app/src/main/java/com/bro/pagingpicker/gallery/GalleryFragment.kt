@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bro.pagingpicker.MainAdapter
 import com.bro.pagingpicker.MainViewModel
 import com.bro.pagingpicker.core.util.convertTo
 import com.bro.pagingpicker.databinding.FragmentGalleryBinding
@@ -37,7 +36,7 @@ class GalleryFragment : Fragment() {
     private val viewModel: GalleryViewModel by viewModels()
     private val mainActivityViewModel: MainViewModel by activityViewModels()
 
-    private lateinit var mainAdapter: MainAdapter
+    private lateinit var galleryAdapter: GalleryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,9 +74,9 @@ class GalleryFragment : Fragment() {
     private fun init() {
         initViewModel()
 
-        mainAdapter = MainAdapter()
+        galleryAdapter = GalleryAdapter()
         binding.recyclerviewGallery.apply {
-            adapter = mainAdapter
+            adapter = galleryAdapter
 
             // getItemAnimator 의 초기값은 DefaultItemAnimator
             // memo. run vs apply
@@ -89,7 +88,7 @@ class GalleryFragment : Fragment() {
                 removeDuration = 120L
             }
 
-            layoutManager = GridLayoutManager(context, MainAdapter.COLUMN_COUNT)
+            layoutManager = GridLayoutManager(context, GalleryAdapter.COLUMN_COUNT)
         }
     }
 
@@ -100,7 +99,7 @@ class GalleryFragment : Fragment() {
         // 참고로, pagedListLiveData 는 dataSource invalidate 되도 유지된다.
         viewModel.mainUiData.observe(viewLifecycleOwner, { pagedListLiveData ->
             pagedListLiveData.observe(viewLifecycleOwner, { images ->
-                mainAdapter.submitList(images)
+                galleryAdapter.submitList(images)
             })
         })
 

@@ -1,17 +1,19 @@
-package com.bro.pagingpicker
+package com.bro.pagingpicker.gallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bro.pagingpicker.BR
 import com.bro.pagingpicker.databinding.ItemMainBinding
+import com.bro.pagingpicker.model.gallery.GalleryItem
 import com.bro.pagingpicker.model.gallery.Image
 
 /**
  * Created by kyunghoon on 2020-12-14
  */
-class MainAdapter() : PagedListAdapter<Image, MainViewHolder>(MainDiff) {
+class GalleryAdapter() : PagedListAdapter<GalleryItem, MainViewHolder>(MainDiff) {
     // memo. super(Diff) 방법
 
     companion object {
@@ -31,8 +33,8 @@ class MainAdapter() : PagedListAdapter<Image, MainViewHolder>(MainDiff) {
 
 class MainViewHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(image: Image?) {
-        binding.setVariable(BR.image, image)
+    fun bind(galleryItem: GalleryItem?) {
+        binding.setVariable(BR.image, galleryItem)
         binding.executePendingBindings()
     }
 }
@@ -41,13 +43,13 @@ class MainViewHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHo
 // object 는 아래와 같다.
 //  public final class ExampleObject {
 //   public static final ExampleObject INSTANCE = new ExampleObject();
-object MainDiff : DiffUtil.ItemCallback<Image>() {
-    override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
-        return oldItem.id == newItem.id
+object MainDiff : DiffUtil.ItemCallback<GalleryItem>() {
+    override fun areItemsTheSame(oldItem: GalleryItem, newItem: GalleryItem): Boolean {
+        return oldItem.getId() == newItem.getId()
     }
 
-    override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
+    override fun areContentsTheSame(oldItem: GalleryItem, newItem: GalleryItem): Boolean {
         // TODO 데이터 내용 늘어나면 변경해줘야함
-        return oldItem.data.contentEquals(newItem.data)
+        return oldItem.getFilePath().contentEquals(newItem.getFilePath())
     }
 }
