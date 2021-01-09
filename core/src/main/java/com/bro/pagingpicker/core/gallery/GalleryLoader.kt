@@ -77,12 +77,12 @@ class ImageLoader(
                     break
                 }
                 // find index
-                val idIndex = cur!!.getColumnIndex(MediaStore.Files.FileColumns._ID)
+                val idIndex = cur.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val filePathIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
                 val mimeTypeIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
 
                 // get
-                val id = cur!!.getLong(idIndex)
+                val id = cur.getLong(idIndex)
                 val filePath = cur.getString(filePathIndex)
                 val mimeType = cur.getString(mimeTypeIndex)
                 images.add(
@@ -119,13 +119,13 @@ class VideoLoader(
                     break
                 }
                 // find index
-                val idIndex = cur!!.getColumnIndex(MediaStore.Files.FileColumns._ID)
+                val idIndex = cur.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val filePathIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
                 val mimeTypeIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
                 val durationIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DURATION)
 
                 // get
-                val id = cur!!.getLong(idIndex)
+                val id = cur.getLong(idIndex)
                 val filePath = cur.getString(filePathIndex)
                 val mimeType = cur.getString(mimeTypeIndex)
                 val duration = cur.getLong(durationIndex)
@@ -165,14 +165,14 @@ class ImageAndVideoLoader(
                     break
                 }
                 // find index
-                val idIndex = cur!!.getColumnIndex(MediaStore.Files.FileColumns._ID)
+                val idIndex = cur.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val filePathIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DATA)
                 val mimeTypeIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
                 val durationIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.DURATION)
                 val mediaTypeIndex = cur.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)
 
                 // get
-                val id = cur!!.getLong(idIndex)
+                val id = cur.getLong(idIndex)
                 val filePath = cur.getString(filePathIndex)
                 val mimeType = cur.getString(mimeTypeIndex)
                 val duration = cur.getLong(durationIndex)

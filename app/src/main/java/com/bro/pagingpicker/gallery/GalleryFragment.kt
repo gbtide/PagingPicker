@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bro.pagingpicker.MainViewModel
+import com.bro.pagingpicker.R
 import com.bro.pagingpicker.core.util.convertTo
 import com.bro.pagingpicker.databinding.FragmentGalleryBinding
 import com.bro.pagingpicker.util.PermissionUtils
+import com.bro.pagingpicker.viewer.ImageViewerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val ARG_GALLERY_CONTENTS_TYPE = "GALLERY_CONTENTS_TYPE"
@@ -74,7 +78,7 @@ class GalleryFragment : Fragment() {
     private fun init() {
         initViewModel()
 
-        galleryAdapter = GalleryAdapter()
+        galleryAdapter = GalleryAdapter(viewModel)
         binding.recyclerviewGallery.apply {
             adapter = galleryAdapter
 
@@ -101,6 +105,11 @@ class GalleryFragment : Fragment() {
             pagedListLiveData.observe(viewLifecycleOwner, { images ->
                 galleryAdapter.submitList(images)
             })
+        })
+
+        viewModel.goToImageViewerAction.observe(viewLifecycleOwner, { image ->
+            val bundle = bundleOf(ImageViewerFragment.URI to image.getFilePath())
+            findNavController().navigate(R.id.to_image_viewer, bundle)
         })
 
         binding.viewModel = viewModel

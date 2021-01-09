@@ -24,8 +24,12 @@
         <import type="androidx.lifecycle.LiveData" />
 
         <variable
-            name="image"
+            name="galleryItem"
             type="com.bro.pagingpicker.model.gallery.GalleryItem" />
+
+        <variable
+            name="eventListener"
+            type="com.bro.pagingpicker.gallery.GalleryEventListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +38,7 @@
         android:background="?selectableItemBackground"
         android:paddingBottom="@dimen/gallery_item_padding_vertical"
         android:paddingTop="@dimen/gallery_item_padding_vertical"
+        android:onClick="@{() -> eventListener.onClickGalleryItem(galleryItem)}"
         >
 
         <androidx.constraintlayout.widget.Guideline
@@ -54,7 +59,7 @@
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:glideImage="@{image.filePath}"
+            app:glideImage="@{galleryItem.filePath}"
             android:textAlignment="viewStart"
             android:textAppearance="?textAppearanceListItem"
             app:layout_constraintDimensionRatio="1:1"

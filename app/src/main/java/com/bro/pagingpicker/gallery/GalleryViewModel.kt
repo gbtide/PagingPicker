@@ -2,14 +2,18 @@ package com.bro.pagingpicker.gallery
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import androidx.navigation.NavDirections
 import androidx.paging.PagedList
 import com.bro.pagingpicker.core.domain.LoadPagedGalleryListUseCase
 import com.bro.pagingpicker.core.domain.LoadPagedPhotoListUseCase
 import com.bro.pagingpicker.core.result.Result
 import com.bro.pagingpicker.core.result.ResultDataState
+import com.bro.pagingpicker.core.util.SingleLiveEvent
 import com.bro.pagingpicker.core.util.combine
 import com.bro.pagingpicker.model.gallery.GalleryItem
+import com.bro.pagingpicker.model.gallery.GalleryType
 import com.bro.pagingpicker.model.gallery.Image
+import com.bro.pagingpicker.model.gallery.Video
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -18,11 +22,19 @@ import kotlinx.coroutines.launch
  */
 class GalleryViewModel @ViewModelInject constructor(
     private val loadPagedGalleryListUseCase: LoadPagedGalleryListUseCase
-) : ViewModel() {
+) : ViewModel(), GalleryEventListener {
 
     companion object {
         private const val TAG = "MainViewModel"
     }
+
+    private val _goToImageViewerAction = SingleLiveEvent<Image>()
+    val goToImageViewerAction: LiveData<Image>
+        get() = _goToImageViewerAction
+
+    private val _goToVideoViewerAction = SingleLiveEvent<Video>()
+    val goToVideoViewerAction: LiveData<Video>
+        get() = _goToVideoViewerAction
 
     val mainUiData = MutableLiveData<LiveData<PagedList<GalleryItem>>>()
 
@@ -77,4 +89,15 @@ class GalleryViewModel @ViewModelInject constructor(
         mainUiData.value?.value?.dataSource?.invalidate()
     }
 
+    override fun onClickGalleryItem(galleryItem: GalleryItem) {
+        if (galleryItem.getType() == GalleryType.IMAGE) {
+            _goToImageViewerAction.value = galleryItem as Image
+        } else {
+            _goToVideoViewerAction.value = galleryItem as Video
+        }
+    }
+}
+
+interface GalleryEventListener {
+    fun onClickGalleryItem(galleryItem: GalleryItem)
 }

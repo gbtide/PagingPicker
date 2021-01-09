@@ -91,7 +91,7 @@ fun <A, B, C, Result> LiveData<A>.combine(
 }
 
 fun Cursor.closeSafely() {
-    this?.let {
+    this.let {
         if (!this.isClosed) {
             this.close()
         }

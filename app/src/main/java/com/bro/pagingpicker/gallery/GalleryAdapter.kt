@@ -6,35 +6,35 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bro.pagingpicker.BR
-import com.bro.pagingpicker.databinding.ItemMainBinding
+import com.bro.pagingpicker.databinding.ItemGalleryImageBinding
 import com.bro.pagingpicker.model.gallery.GalleryItem
-import com.bro.pagingpicker.model.gallery.Image
 
 /**
  * Created by kyunghoon on 2020-12-14
  */
-class GalleryAdapter() : PagedListAdapter<GalleryItem, MainViewHolder>(MainDiff) {
+class GalleryAdapter(val galleryEventListener: GalleryEventListener) : PagedListAdapter<GalleryItem, ImageViewHolder>(MainDiff) {
     // memo. super(Diff) 방법
 
     companion object {
         const val COLUMN_COUNT = 3
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val binding = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MainViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val binding = ItemGalleryImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.eventListener = galleryEventListener
+        return ImageViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
 }
 
-class MainViewHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
+class ImageViewHolder(private val binding: ItemGalleryImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(galleryItem: GalleryItem?) {
-        binding.setVariable(BR.image, galleryItem)
+        binding.setVariable(BR.galleryItem, galleryItem)
         binding.executePendingBindings()
     }
 }

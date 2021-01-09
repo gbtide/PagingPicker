@@ -9,6 +9,20 @@
         android:id="@+id/galleryFragment"
         android:name="com.bro.pagingpicker.gallery.GalleryFragment"
         android:label="fragment_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/to_image_viewer"
+            app:destination="@id/imageViewerFragment">
+            <argument
+                android:name="resource"
+                android:defaultValue="false"
+                app:argType="boolean" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/imageViewerFragment"
+        android:name="com.bro.pagingpicker.viewer.ImageViewerFragment"
+        android:label="ImageViewerFragment" />
 
 </navigation>
