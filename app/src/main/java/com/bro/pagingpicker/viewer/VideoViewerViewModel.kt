@@ -1,11 +1,9 @@
 package com.bro.pagingpicker.viewer
 
-import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.bro.pagingpicker.core.util.SingleLiveEvent
-import com.bro.pagingpicker.model.gallery.GalleryItem
 import com.bro.pagingpicker.model.gallery.Video
 
 /**
