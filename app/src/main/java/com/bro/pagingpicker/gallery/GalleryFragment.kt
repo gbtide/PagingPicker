@@ -19,21 +19,12 @@ import com.bro.pagingpicker.util.PermissionUtils
 import com.bro.pagingpicker.viewer.ImageViewerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+
 private const val ARG_GALLERY_CONTENTS_TYPE = "GALLERY_CONTENTS_TYPE"
 
 @AndroidEntryPoint
 class GalleryFragment : Fragment() {
     private var galleryContentsType: GalleryContentsType? = null
-
-    companion object {
-        @JvmStatic
-        fun newInstance(galleryContentsType: GalleryContentsType) =
-            GalleryFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_GALLERY_CONTENTS_TYPE, galleryContentsType)
-                }
-            }
-    }
 
     private lateinit var binding: FragmentGalleryBinding
 
@@ -44,8 +35,14 @@ class GalleryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.image_preview_transition)
+//        postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
+
         arguments?.let {
-            galleryContentsType = it.getSerializable(ARG_GALLERY_CONTENTS_TYPE).convertTo(GalleryContentsType::class.java, GalleryContentsType.GALLERY)
+            galleryContentsType = it.getSerializable(ARG_GALLERY_CONTENTS_TYPE).convertTo(
+                GalleryContentsType::class.java,
+                GalleryContentsType.GALLERY
+            )
         }
     }
 
@@ -59,6 +56,7 @@ class GalleryFragment : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
@@ -79,6 +77,7 @@ class GalleryFragment : Fragment() {
         initViewModel()
 
         galleryAdapter = GalleryAdapter(viewModel)
+
         binding.recyclerviewGallery.apply {
             adapter = galleryAdapter
 
@@ -102,17 +101,27 @@ class GalleryFragment : Fragment() {
         // ComputableLiveData compute 시점과 observing 시점 차이가 나서 이중으로 setting.
         // 참고로, pagedListLiveData 는 dataSource invalidate 되도 유지된다.
         viewModel.mainUiData.observe(viewLifecycleOwner, { pagedListLiveData ->
-            pagedListLiveData.observe(viewLifecycleOwner, { images ->
-                galleryAdapter.submitList(images)
+            pagedListLiveData.observe(viewLifecycleOwner, { galleryItem ->
+                galleryAdapter.submitList(galleryItem)
             })
         })
 
-        viewModel.goToImageViewerAction.observe(viewLifecycleOwner, { image ->
-            val bundle = bundleOf(ImageViewerFragment.URI to image.getFilePath())
+        viewModel.goToImageViewerAction.observe(viewLifecycleOwner, { param ->
+//            val preview = param.first.findViewById<View>(R.id.preview_image);
+//            val extras = FragmentNavigatorExtras(preview to preview.transitionName)
+            val bundle = bundleOf(ImageViewerFragment.URI to param.second.getFilePath())
             findNavController().navigate(R.id.to_image_viewer, bundle)
         })
 
+        viewModel.goToVideoViewerAction.observe(viewLifecycleOwner, { param ->
+//            val preview = param.first.findViewById<View>(R.id.preview_image);
+//            val extras = FragmentNavigatorExtras(preview to preview.transitionName)
+            val bundle = bundleOf(ImageViewerFragment.URI to param.second.getFilePath())
+            findNavController().navigate(R.id.to_video_viewer, bundle)
+        })
+
         binding.viewModel = viewModel
+
     }
 
 }

@@ -1,11 +1,10 @@
 package com.bro.pagingpicker.gallery
 
+import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import androidx.navigation.NavDirections
 import androidx.paging.PagedList
 import com.bro.pagingpicker.core.domain.LoadPagedGalleryListUseCase
-import com.bro.pagingpicker.core.domain.LoadPagedPhotoListUseCase
 import com.bro.pagingpicker.core.result.Result
 import com.bro.pagingpicker.core.result.ResultDataState
 import com.bro.pagingpicker.core.util.SingleLiveEvent
@@ -28,19 +27,19 @@ class GalleryViewModel @ViewModelInject constructor(
         private const val TAG = "MainViewModel"
     }
 
-    private val _goToImageViewerAction = SingleLiveEvent<Image>()
-    val goToImageViewerAction: LiveData<Image>
+    private val _goToImageViewerAction = SingleLiveEvent<Pair<View, Image>>()
+    val goToImageViewerAction: LiveData<Pair<View, Image>>
         get() = _goToImageViewerAction
 
-    private val _goToVideoViewerAction = SingleLiveEvent<Video>()
-    val goToVideoViewerAction: LiveData<Video>
+    private val _goToVideoViewerAction = SingleLiveEvent<Pair<View, Video>>()
+    val goToVideoViewerAction: LiveData<Pair<View, Video>>
         get() = _goToVideoViewerAction
 
     val mainUiData = MutableLiveData<LiveData<PagedList<GalleryItem>>>()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
-    get() = _isLoading
+        get() = _isLoading
 
     private val dispatchSwipe = MutableLiveData<Boolean>()
 
@@ -89,15 +88,15 @@ class GalleryViewModel @ViewModelInject constructor(
         mainUiData.value?.value?.dataSource?.invalidate()
     }
 
-    override fun onClickGalleryItem(galleryItem: GalleryItem) {
+    override fun onClickGalleryItem(view: View, galleryItem: GalleryItem) {
         if (galleryItem.getType() == GalleryType.IMAGE) {
-            _goToImageViewerAction.value = galleryItem as Image
+            _goToImageViewerAction.value = view to galleryItem as Image
         } else {
-            _goToVideoViewerAction.value = galleryItem as Video
+            _goToVideoViewerAction.value = view to galleryItem as Video
         }
     }
 }
 
 interface GalleryEventListener {
-    fun onClickGalleryItem(galleryItem: GalleryItem)
+    fun onClickGalleryItem(view: View, galleryItem: GalleryItem)
 }

@@ -1,41 +1,91 @@
 package com.bro.pagingpicker.gallery
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bro.pagingpicker.BR
 import com.bro.pagingpicker.databinding.ItemGalleryImageBinding
+import com.bro.pagingpicker.databinding.ItemGalleryVideoBinding
 import com.bro.pagingpicker.model.gallery.GalleryItem
+import com.bro.pagingpicker.model.gallery.GalleryType
+import com.bro.pagingpicker.model.gallery.Image
+import com.bro.pagingpicker.model.gallery.Video
 
 /**
  * Created by kyunghoon on 2020-12-14
  */
-class GalleryAdapter(val galleryEventListener: GalleryEventListener) : PagedListAdapter<GalleryItem, ImageViewHolder>(MainDiff) {
+class GalleryAdapter(private val galleryEventListener: GalleryEventListener) :
+    PagedListAdapter<GalleryItem, GalleryItemViewHolder>(MainDiff) {
     // memo. super(Diff) 방법
 
     companion object {
         const val COLUMN_COUNT = 3
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val binding = ItemGalleryImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.eventListener = galleryEventListener
-        return ImageViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryItemViewHolder {
+        return when (GalleryType.find(viewType)) {
+            GalleryType.VIDEO -> {
+                VideoItemViewHolder(ItemGalleryVideoBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                    .apply {
+                        eventListener = galleryEventListener
+                    })
+            }
+            else -> {
+                ImageItemViewHolder(ItemGalleryImageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                    .apply {
+                        eventListener = galleryEventListener
+                    })
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GalleryItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return getItem(position)?.getType()?.value ?: -1
     }
 
 }
 
-class ImageViewHolder(private val binding: ItemGalleryImageBinding) : RecyclerView.ViewHolder(binding.root) {
+open abstract class GalleryItemViewHolder(
+    @NonNull itemView: View
+) : RecyclerView.ViewHolder(itemView) {
+    abstract fun bind(galleryItem: GalleryItem?)
+}
 
-    fun bind(galleryItem: GalleryItem?) {
-        binding.setVariable(BR.galleryItem, galleryItem)
-        binding.executePendingBindings()
+class ImageItemViewHolder(private val binding: ItemGalleryImageBinding) :
+    GalleryItemViewHolder(binding.root) {
+
+    override fun bind(galleryItem: GalleryItem?) {
+        galleryItem?.let {
+            binding.setVariable(BR.item, it as Image)
+            binding.executePendingBindings()
+        }
+    }
+}
+
+class VideoItemViewHolder(private val binding: ItemGalleryVideoBinding) :
+    GalleryItemViewHolder(binding.root) {
+
+    override fun bind(galleryItem: GalleryItem?) {
+        galleryItem?.let {
+            binding.setVariable(BR.item, it as Video)
+            binding.executePendingBindings()
+        }
     }
 }
 

@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
 import com.bro.pagingpicker.R
-import com.bro.pagingpicker.databinding.FragmentImageViewerBinding
-import com.davemorrissey.labs.subscaleview.ImageSource
+import com.bro.pagingpicker.databinding.FragmentVideoViewerBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
-
 
 /**
  * Created by kyunghoon on 2021-01
  */
 @AndroidEntryPoint
-class ImageViewerFragment : Fragment() {
+class VideoViewerFragment : Fragment() {
 
     companion object {
         const val URI = "uri"
@@ -25,7 +26,7 @@ class ImageViewerFragment : Fragment() {
 
     private var fileUri: String? = null
 
-    private lateinit var binding: FragmentImageViewerBinding
+    private lateinit var binding: FragmentVideoViewerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,17 +43,21 @@ class ImageViewerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentImageViewerBinding.inflate(inflater, container, false)
+        binding = FragmentVideoViewerBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
                 uri = fileUri
             }
 
         fileUri?.let {
-            binding.imageViewerView.setImage(ImageSource.uri(it))
+            Glide.with(this)
+                .load(fileUri)
+                .centerInside()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .transition(DrawableTransitionOptions.withCrossFade(100))
+                .into(binding.videoViewerView)
         }
 
         return binding.root
     }
-
 }

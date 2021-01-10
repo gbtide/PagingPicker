@@ -1,6 +1,7 @@
 package com.bro.pagingpicker.util
 
 import androidx.databinding.ViewDataBinding
+import com.bro.pagingpicker.core.util.checkAllMatched
 
 /**
  * Created by kyunghoon on 2020-12-28
