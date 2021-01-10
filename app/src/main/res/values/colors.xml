@@ -25,6 +25,7 @@
         <item>@color/bright_orange</item>
     </integer-array>
 
+    <color name="color_control_medium">#aaffffff</color>
     <color name="color_control_light">#39000000</color>
 
 </resources>

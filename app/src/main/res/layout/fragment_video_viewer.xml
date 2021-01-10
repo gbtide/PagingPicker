@@ -28,8 +28,7 @@
         <ImageView
             android:id="@+id/video_viewer_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside"
+            android:layout_height="match_parent"
             android:onClick="@{() -> eventListener.onClickPreviewImage(video)}"
             app:glideImage="@{video.filePath}"
             app:glideCenterInside="@{true}"
