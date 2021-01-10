@@ -2,14 +2,16 @@ package com.bro.pagingpicker.util
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bro.pagingpicker.widget.CustomSwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by kyunghoon on 2020-12-14
@@ -31,10 +33,10 @@ fun setSwipeRefreshColors(swipeRefreshLayout: CustomSwipeRefreshLayout, colorRes
     swipeRefreshLayout.setColorSchemeColors(*colorResIds)
 }
 
-@BindingAdapter(value = ["glideImage", "centerInside"], requireAll = false)
-fun setGlideImage(imageView: ImageView, glideImage: String?, centerInside: Boolean) {
+@BindingAdapter(value = ["glideImage", "glideCenterInside"], requireAll = false)
+fun setGlideImage(imageView: ImageView, glideImage: String?, glideCenterInside: Boolean) {
     val builder = Glide.with(imageView.context).load(glideImage)
-    if (centerInside) {
+    if (glideCenterInside) {
         builder.centerInside()
     } else {
         // default
@@ -48,4 +50,9 @@ fun setGlideImage(imageView: ImageView, glideImage: String?, centerInside: Boole
 @BindingAdapter("image")
 fun setImage(imageView: SubsamplingScaleImageView, localPath: String) {
     imageView.setImage(ImageSource.uri(localPath))
+}
+
+@BindingAdapter(value = ["formatSeconds", "pattern"])
+fun secondsToDateText(textView: TextView, formatSeconds: Long, pattern: String) {
+    textView.text = TimeUtils.parseToHHmmss(formatSeconds)
 }

@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.bro.pagingpicker.databinding.FragmentImageViewerBinding
+import com.bro.pagingpicker.gallery.GalleryViewModel
 import com.bro.pagingpicker.model.gallery.Image
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +25,8 @@ class ImageViewerFragment : Fragment() {
     private var image: Image? = null
 
     private lateinit var binding: FragmentImageViewerBinding
+
+    private val viewModel: ImageViewerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,16 @@ class ImageViewerFragment : Fragment() {
             }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViewModel()
+        viewModel.onViewCreated(image)
+    }
+
+    private fun initViewModel() {
     }
 
 }

@@ -1,12 +1,11 @@
 package com.bro.pagingpicker.viewer
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.bro.pagingpicker.core.util.SingleLiveEvent
+import com.bro.pagingpicker.model.gallery.Image
 
 /**
- * Created by user on 2021-01-10
+ * Created by kyunghoon on 2021-01-10
  */
 class ImageViewerViewModel @ViewModelInject constructor(
 ) : ViewModel() {
@@ -15,9 +14,10 @@ class ImageViewerViewModel @ViewModelInject constructor(
         private const val TAG = "ImageViewerViewModel"
     }
 
-    private val _playVideoAction = SingleLiveEvent<String>()
-    val playVideoAction: LiveData<String>
-        get() = _playVideoAction
+    private var image: Image? = null
 
+    fun onViewCreated(image: Image?) {
+        this.image = image
+    }
 
 }

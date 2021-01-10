@@ -10,17 +10,17 @@
             name="video"
             type="com.bro.pagingpicker.model.gallery.Video" />
 
-        <!--
         <variable
-            name="viewModel"
-            type="com.bro.pagingpicker.gallery.GalleryViewModel" />
-            -->
+            name="eventListener"
+            type="com.bro.pagingpicker.viewer.VideoViewerEventListener" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        >
 
         <!--
             android:transitionName="@{uri}"
@@ -28,15 +28,38 @@
         <ImageView
             android:id="@+id/video_viewer_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="centerInside"
+            android:onClick="@{() -> eventListener.onClickPreviewImage(video)}"
             app:glideImage="@{video.filePath}"
-            app:centerInside="@{true}"
+            app:glideCenterInside="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_view_top_gradient"
+            app:layout_constraintBottom_toBottomOf="@id/video_viewer_view"
+            app:layout_constraintLeft_toLeftOf="@id/video_viewer_view"
+            app:layout_constraintRight_toRightOf="@id/video_viewer_view"
+            app:layout_constraintTop_toTopOf="@id/video_viewer_view"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/gallery_video_item_play_icon"
+            android:layout_height="@dimen/gallery_video_item_play_icon"
+            android:layout_centerInParent="true"
+            android:src="@drawable/btn_video_play"
+            app:layout_constraintBottom_toBottomOf="@id/video_viewer_view"
+            app:layout_constraintLeft_toLeftOf="@id/video_viewer_view"
+            app:layout_constraintRight_toRightOf="@id/video_viewer_view"
+            app:layout_constraintTop_toTopOf="@id/video_viewer_view"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
