@@ -17,6 +17,7 @@ import com.bro.pagingpicker.core.util.convertTo
 import com.bro.pagingpicker.databinding.FragmentGalleryBinding
 import com.bro.pagingpicker.util.PermissionUtils
 import com.bro.pagingpicker.viewer.ImageViewerFragment
+import com.bro.pagingpicker.viewer.VideoViewerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -109,14 +110,14 @@ class GalleryFragment : Fragment() {
         viewModel.goToImageViewerAction.observe(viewLifecycleOwner, { param ->
 //            val preview = param.first.findViewById<View>(R.id.preview_image);
 //            val extras = FragmentNavigatorExtras(preview to preview.transitionName)
-            val bundle = bundleOf(ImageViewerFragment.URI to param.second.getFilePath())
+            val bundle = bundleOf(ImageViewerFragment.IMAGE to param.second)
             findNavController().navigate(R.id.to_image_viewer, bundle)
         })
 
         viewModel.goToVideoViewerAction.observe(viewLifecycleOwner, { param ->
 //            val preview = param.first.findViewById<View>(R.id.preview_image);
 //            val extras = FragmentNavigatorExtras(preview to preview.transitionName)
-            val bundle = bundleOf(ImageViewerFragment.URI to param.second.getFilePath())
+            val bundle = bundleOf(VideoViewerFragment.VIDEO to param.second)
             findNavController().navigate(R.id.to_video_viewer, bundle)
         })
 

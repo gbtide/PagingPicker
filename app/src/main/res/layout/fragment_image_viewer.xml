@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="uri"
-            type="String" />
+            name="image"
+            type="com.bro.pagingpicker.model.gallery.Image" />
 
         <!--
         <variable
@@ -21,11 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--
+               android:transitionName="@{uri}"
+        -->
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/image_viewer_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionName="@{uri}"
+            app:image="@{image.filePath}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

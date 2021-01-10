@@ -20,7 +20,6 @@ import com.bro.pagingpicker.model.gallery.Video
  */
 class GalleryAdapter(private val galleryEventListener: GalleryEventListener) :
     PagedListAdapter<GalleryItem, GalleryItemViewHolder>(MainDiff) {
-    // memo. super(Diff) 방법
 
     companion object {
         const val COLUMN_COUNT = 3

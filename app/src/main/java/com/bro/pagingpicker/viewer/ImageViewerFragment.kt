@@ -5,12 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionInflater
-import com.bro.pagingpicker.R
 import com.bro.pagingpicker.databinding.FragmentImageViewerBinding
-import com.davemorrissey.labs.subscaleview.ImageSource
+import com.bro.pagingpicker.model.gallery.Image
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -20,10 +17,10 @@ import java.util.concurrent.TimeUnit
 class ImageViewerFragment : Fragment() {
 
     companion object {
-        const val URI = "uri"
+        const val IMAGE = "image"
     }
 
-    private var fileUri: String? = null
+    private var image: Image? = null
 
     private lateinit var binding: FragmentImageViewerBinding
 
@@ -33,7 +30,7 @@ class ImageViewerFragment : Fragment() {
 //        postponeEnterTransition(750L, TimeUnit.MILLISECONDS)
 
         arguments?.let {
-            fileUri = it.getString(URI)
+            image = it.getSerializable(IMAGE) as Image
         }
     }
 
@@ -45,12 +42,8 @@ class ImageViewerFragment : Fragment() {
         binding = FragmentImageViewerBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                uri = fileUri
+                image = this@ImageViewerFragment.image
             }
-
-        fileUri?.let {
-            binding.imageViewerView.setImage(ImageSource.uri(it))
-        }
 
         return binding.root
     }

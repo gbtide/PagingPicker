@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionInflater
-import com.bro.pagingpicker.R
 import com.bro.pagingpicker.databinding.FragmentVideoViewerBinding
+import com.bro.pagingpicker.model.gallery.Image
+import com.bro.pagingpicker.model.gallery.Video
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by kyunghoon on 2021-01
@@ -21,10 +20,10 @@ import java.util.concurrent.TimeUnit
 class VideoViewerFragment : Fragment() {
 
     companion object {
-        const val URI = "uri"
+        const val VIDEO = "video"
     }
 
-    private var fileUri: String? = null
+    private var video: Video? = null
 
     private lateinit var binding: FragmentVideoViewerBinding
 
@@ -34,7 +33,7 @@ class VideoViewerFragment : Fragment() {
 //        postponeEnterTransition(750L, TimeUnit.MILLISECONDS)
 
         arguments?.let {
-            fileUri = it.getString(URI)
+            video = it.getSerializable(VIDEO) as Video
         }
     }
 
@@ -46,17 +45,8 @@ class VideoViewerFragment : Fragment() {
         binding = FragmentVideoViewerBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                uri = fileUri
+                video = this@VideoViewerFragment.video
             }
-
-        fileUri?.let {
-            Glide.with(this)
-                .load(fileUri)
-                .centerInside()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .transition(DrawableTransitionOptions.withCrossFade(100))
-                .into(binding.videoViewerView)
-        }
 
         return binding.root
     }

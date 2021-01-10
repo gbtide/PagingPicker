@@ -3,12 +3,13 @@ package com.bro.pagingpicker.util
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.bro.pagingpicker.R
 import com.bro.pagingpicker.widget.CustomSwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import timber.log.Timber
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 
 /**
  * Created by kyunghoon on 2020-12-14
@@ -30,12 +31,21 @@ fun setSwipeRefreshColors(swipeRefreshLayout: CustomSwipeRefreshLayout, colorRes
     swipeRefreshLayout.setColorSchemeColors(*colorResIds)
 }
 
-@BindingAdapter("glideImage")
-fun setGlideImage(imageView: ImageView, url: String?) {
-    Glide.with(imageView.context)
-        .load(url)
-        .centerCrop()
-        .diskCacheStrategy(DiskCacheStrategy.NONE)
+@BindingAdapter(value = ["glideImage", "centerInside"], requireAll = false)
+fun setGlideImage(imageView: ImageView, glideImage: String?, centerInside: Boolean) {
+    val builder = Glide.with(imageView.context).load(glideImage)
+    if (centerInside) {
+        builder.centerInside()
+    } else {
+        // default
+        builder.centerCrop()
+    }
+    builder.diskCacheStrategy(DiskCacheStrategy.NONE)
         .transition(DrawableTransitionOptions.withCrossFade(300))
         .into(imageView)
+}
+
+@BindingAdapter("image")
+fun setImage(imageView: SubsamplingScaleImageView, localPath: String) {
+    imageView.setImage(ImageSource.uri(localPath))
 }
